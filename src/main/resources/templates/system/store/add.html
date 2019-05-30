@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增商家')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-store-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">店铺名：</label>
+				<div class="col-sm-8">
+					<input id="storeName" name="storeName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开店区域：</label>
+				<div class="col-sm-8">
+					<input id="storeAddress" name="storeAddress" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">普通，黄金，砖石，皇冠等：</label>
+				<div class="col-sm-8">
+					<input id="storeLevel" name="storeLevel" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开店时长：</label>
+				<div class="col-sm-8">
+					<input id="storeAge" name="storeAge" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">店铺评分：</label>
+				<div class="col-sm-8">
+					<input id="storeScore" name="storeScore" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">总销量：</label>
+				<div class="col-sm-8">
+					<input id="totleSales" name="totleSales" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">0：正常。1：审核中。2：冻结：</label>
+				<div class="col-sm-8">
+					<input id="state" name="state" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/store"
+		$("#form-store-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-store-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

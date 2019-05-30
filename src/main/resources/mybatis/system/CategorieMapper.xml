@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.categorie.mapper.CategorieMapper">
+    
+    <resultMap type="Categorie" id="CategorieResult">
+        <result property="categoriesId"    column="categories_id"    />
+        <result property="oneCategories"    column="one_categories"    />
+        <result property="twoCategories"    column="two_categories"    />
+        <result property="bookId"    column="book_id"    />
+    </resultMap>
+	
+	<sql id="selectCategorieVo">
+        select categories_id, one_categories, two_categories, book_id from categorie
+    </sql>
+	
+    <select id="selectCategorieList" parameterType="Categorie" resultMap="CategorieResult">
+        <include refid="selectCategorieVo"/>
+        <where>  
+            <if test="categoriesId != null "> and categories_id = #{categoriesId}</if>
+             <if test="oneCategories != null  and oneCategories != '' "> and one_categories = #{oneCategories}</if>
+             <if test="twoCategories != null  and twoCategories != '' "> and two_categories = #{twoCategories}</if>
+             <if test="bookId != null  and bookId != '' "> and book_id = #{bookId}</if>
+         </where>
+    </select>
+    
+    <select id="selectCategorieById" parameterType="Long" resultMap="CategorieResult">
+        <include refid="selectCategorieVo"/>
+        where categories_id = #{categoriesId}
+    </select>
+        
+    <insert id="insertCategorie" parameterType="Categorie" useGeneratedKeys="true" keyProperty="categoriesId">
+        insert into categorie
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oneCategories != null  and oneCategories != ''  ">one_categories,</if>
+			<if test="twoCategories != null  and twoCategories != ''  ">two_categories,</if>
+			<if test="bookId != null  and bookId != ''  ">book_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oneCategories != null  and oneCategories != ''  ">#{oneCategories},</if>
+			<if test="twoCategories != null  and twoCategories != ''  ">#{twoCategories},</if>
+			<if test="bookId != null  and bookId != ''  ">#{bookId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCategorie" parameterType="Categorie">
+        update categorie
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="oneCategories != null  and oneCategories != ''  ">one_categories = #{oneCategories},</if>
+            <if test="twoCategories != null  and twoCategories != ''  ">two_categories = #{twoCategories},</if>
+            <if test="bookId != null  and bookId != ''  ">book_id = #{bookId},</if>
+        </trim>
+        where categories_id = #{categoriesId}
+    </update>
+
+	<delete id="deleteCategorieById" parameterType="Long">
+        delete from categorie where categories_id = #{categoriesId}
+    </delete>
+	
+    <delete id="deleteCategorieByIds" parameterType="String">
+        delete from categorie where categories_id in 
+        <foreach item="categoriesId" collection="array" open="(" separator="," close=")">
+            #{categoriesId}
+        </foreach>
+    </delete>
+    
+</mapper>

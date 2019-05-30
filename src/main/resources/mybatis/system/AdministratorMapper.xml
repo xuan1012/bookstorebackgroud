@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.administrator.mapper.AdministratorMapper">
+    
+    <resultMap type="Administrator" id="AdministratorResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="phone"    column="phone"    />
+        <result property="department"    column="department"    />
+    </resultMap>
+	
+	<sql id="selectAdministratorVo">
+        select id, login_name, password, name, identity_card, phone, department from administrator
+    </sql>
+	
+    <select id="selectAdministratorList" parameterType="Administrator" resultMap="AdministratorResult">
+        <include refid="selectAdministratorVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="loginName != null  and loginName != '' "> and login_name = #{loginName}</if>
+             <if test="password != null  and password != '' "> and password = #{password}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="identityCard != null  and identityCard != '' "> and identity_card = #{identityCard}</if>
+             <if test="phone != null "> and phone = #{phone}</if>
+             <if test="department != null  and department != '' "> and department = #{department}</if>
+         </where>
+    </select>
+    
+    <select id="selectAdministratorById" parameterType="Long" resultMap="AdministratorResult">
+        <include refid="selectAdministratorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAdministrator" parameterType="Administrator" useGeneratedKeys="true" keyProperty="id">
+        insert into administrator
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="loginName != null  and loginName != ''  ">login_name,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+			<if test="identityCard != null  and identityCard != ''  ">identity_card,</if>
+			<if test="phone != null  ">phone,</if>
+			<if test="department != null  and department != ''  ">department,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="loginName != null  and loginName != ''  ">#{loginName},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="identityCard != null  and identityCard != ''  ">#{identityCard},</if>
+			<if test="phone != null  ">#{phone},</if>
+			<if test="department != null  and department != ''  ">#{department},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAdministrator" parameterType="Administrator">
+        update administrator
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="identityCard != null  and identityCard != ''  ">identity_card = #{identityCard},</if>
+            <if test="phone != null  ">phone = #{phone},</if>
+            <if test="department != null  and department != ''  ">department = #{department},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteAdministratorById" parameterType="Long">
+        delete from administrator where id = #{id}
+    </delete>
+	
+    <delete id="deleteAdministratorByIds" parameterType="String">
+        delete from administrator where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

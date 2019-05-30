@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改购物车')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-shoppingcart-edit" th:object="${shoppingcart}">
+            <input id="cartId" name="cartId" th:field="*{cartId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户id：</label>
+				<div class="col-sm-8">
+					<input id="userId" name="userId" th:field="*{userId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">书id：</label>
+				<div class="col-sm-8">
+					<input id="bookId" name="bookId" th:field="*{bookId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">数量：</label>
+				<div class="col-sm-8">
+					<input id="count" name="count" th:field="*{count}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/shoppingcart";
+		$("#form-shoppingcart-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-shoppingcart-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

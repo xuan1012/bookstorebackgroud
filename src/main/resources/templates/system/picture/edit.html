@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改图片')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-picture-edit" th:object="${picture}">
+            <input id="pictureId" name="pictureId" th:field="*{pictureId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">图片内容（地址）：</label>
+				<div class="col-sm-8">
+					<input id="pictureContent" name="pictureContent" th:field="*{pictureContent}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">书的Id：</label>
+				<div class="col-sm-8">
+					<input id="bookId" name="bookId" th:field="*{bookId}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/picture";
+		$("#form-picture-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-picture-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

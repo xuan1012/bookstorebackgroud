@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.shoppingcart.mapper.ShoppingcartMapper">
+    
+    <resultMap type="Shoppingcart" id="ShoppingcartResult">
+        <result property="cartId"    column="cart_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="count"    column="count"    />
+    </resultMap>
+	
+	<sql id="selectShoppingcartVo">
+        select cart_id, user_id, book_id, count from shoppingcart
+    </sql>
+	
+    <select id="selectShoppingcartList" parameterType="Shoppingcart" resultMap="ShoppingcartResult">
+        <include refid="selectShoppingcartVo"/>
+        <where>  
+            <if test="cartId != null "> and cart_id = #{cartId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="bookId != null "> and book_id = #{bookId}</if>
+             <if test="count != null "> and count = #{count}</if>
+         </where>
+    </select>
+    
+    <select id="selectShoppingcartById" parameterType="Long" resultMap="ShoppingcartResult">
+        <include refid="selectShoppingcartVo"/>
+        where cart_id = #{cartId}
+    </select>
+        
+    <insert id="insertShoppingcart" parameterType="Shoppingcart" useGeneratedKeys="true" keyProperty="cartId">
+        insert into shoppingcart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="bookId != null  ">book_id,</if>
+			<if test="count != null  ">count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="bookId != null  ">#{bookId},</if>
+			<if test="count != null  ">#{count},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateShoppingcart" parameterType="Shoppingcart">
+        update shoppingcart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="bookId != null  ">book_id = #{bookId},</if>
+            <if test="count != null  ">count = #{count},</if>
+        </trim>
+        where cart_id = #{cartId}
+    </update>
+
+	<delete id="deleteShoppingcartById" parameterType="Long">
+        delete from shoppingcart where cart_id = #{cartId}
+    </delete>
+	
+    <delete id="deleteShoppingcartByIds" parameterType="String">
+        delete from shoppingcart where cart_id in 
+        <foreach item="cartId" collection="array" open="(" separator="," close=")">
+            #{cartId}
+        </foreach>
+    </delete>
+    
+</mapper>

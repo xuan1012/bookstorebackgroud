@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.verification.mapper.VerificationMapper">
+    
+    <resultMap type="Verification" id="VerificationResult">
+        <result property="verificationId"    column="verification_id"    />
+        <result property="verificationContent"    column="verification_content"    />
+        <result property="userId"    column="user_id"    />
+        <result property="date"    column="date"    />
+    </resultMap>
+	
+	<sql id="selectVerificationVo">
+        select verification_id, verification_content, user_id, date from verification
+    </sql>
+	
+    <select id="selectVerificationList" parameterType="Verification" resultMap="VerificationResult">
+        <include refid="selectVerificationVo"/>
+        <where>  
+            <if test="verificationId != null "> and verification_id = #{verificationId}</if>
+             <if test="verificationContent != null "> and verification_content = #{verificationContent}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="date != null "> and date = #{date}</if>
+         </where>
+    </select>
+    
+    <select id="selectVerificationById" parameterType="Integer" resultMap="VerificationResult">
+        <include refid="selectVerificationVo"/>
+        where verification_id = #{verificationId}
+    </select>
+        
+    <insert id="insertVerification" parameterType="Verification" useGeneratedKeys="true" keyProperty="verificationId">
+        insert into verification
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="verificationContent != null  ">verification_content,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="date != null  ">date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="verificationContent != null  ">#{verificationContent},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="date != null  ">#{date},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateVerification" parameterType="Verification">
+        update verification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="verificationContent != null  ">verification_content = #{verificationContent},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="date != null  ">date = #{date},</if>
+        </trim>
+        where verification_id = #{verificationId}
+    </update>
+
+	<delete id="deleteVerificationById" parameterType="Integer">
+        delete from verification where verification_id = #{verificationId}
+    </delete>
+	
+    <delete id="deleteVerificationByIds" parameterType="String">
+        delete from verification where verification_id in 
+        <foreach item="verificationId" collection="array" open="(" separator="," close=")">
+            #{verificationId}
+        </foreach>
+    </delete>
+    
+</mapper>

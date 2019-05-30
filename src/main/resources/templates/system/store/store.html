@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('商家列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								店铺名：<input type="text" name="storeName"/>
+							</li>
+
+							<li>
+								开店区域：<input type="text" name="storeAddress"/>
+							</li>
+
+							<li>
+								普通，黄金，砖石，皇冠等：<input type="text" name="storeLevel"/>
+							</li>
+
+							<li>
+								开店时长：<input type="text" name="storeAge"/>
+							</li>
+
+							<li>
+								店铺评分：<input type="text" name="storeScore"/>
+							</li>
+
+							<li>
+								总销量：<input type="text" name="totleSales"/>
+							</li>
+
+							<li>
+								0：正常。1：审核中。2：冻结：<input type="text" name="state"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:store:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:store:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:store:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:store:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:store:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:store:remove')}]];
+        var prefix = ctx + "system/store";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "商家",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'storeId', 
+					title : '店铺Id',
+					visible: false
+				},
+				{
+					field : 'storeName', 
+					title : '店铺名',
+					sortable: true
+				},
+				{
+					field : 'storeAddress', 
+					title : '开店区域',
+					sortable: true
+				},
+				{
+					field : 'storeLevel', 
+					title : '普通，黄金，砖石，皇冠等',
+					sortable: true
+				},
+				{
+					field : 'storeAge', 
+					title : '开店时长',
+					sortable: true
+				},
+				{
+					field : 'storeScore', 
+					title : '店铺评分',
+					sortable: true
+				},
+				{
+					field : 'totleSales', 
+					title : '总销量',
+					sortable: true
+				},
+				{
+					field : 'state', 
+					title : '0：正常。1：审核中。2：冻结',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.storeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.storeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

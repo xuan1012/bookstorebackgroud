@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.picture.mapper.PictureMapper">
+    
+    <resultMap type="Picture" id="PictureResult">
+        <result property="pictureId"    column="picture_id"    />
+        <result property="pictureContent"    column="picture_content"    />
+        <result property="bookId"    column="book_id"    />
+    </resultMap>
+	
+	<sql id="selectPictureVo">
+        select picture_id, picture_content, book_id from picture
+    </sql>
+	
+    <select id="selectPictureList" parameterType="Picture" resultMap="PictureResult">
+        <include refid="selectPictureVo"/>
+        <where>  
+            <if test="pictureId != null "> and picture_id = #{pictureId}</if>
+             <if test="pictureContent != null  and pictureContent != '' "> and picture_content = #{pictureContent}</if>
+             <if test="bookId != null  and bookId != '' "> and book_id = #{bookId}</if>
+         </where>
+    </select>
+    
+    <select id="selectPictureById" parameterType="Integer" resultMap="PictureResult">
+        <include refid="selectPictureVo"/>
+        where picture_id = #{pictureId}
+    </select>
+        
+    <insert id="insertPicture" parameterType="Picture" useGeneratedKeys="true" keyProperty="pictureId">
+        insert into picture
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pictureContent != null  and pictureContent != ''  ">picture_content,</if>
+			<if test="bookId != null  and bookId != ''  ">book_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pictureContent != null  and pictureContent != ''  ">#{pictureContent},</if>
+			<if test="bookId != null  and bookId != ''  ">#{bookId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePicture" parameterType="Picture">
+        update picture
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pictureContent != null  and pictureContent != ''  ">picture_content = #{pictureContent},</if>
+            <if test="bookId != null  and bookId != ''  ">book_id = #{bookId},</if>
+        </trim>
+        where picture_id = #{pictureId}
+    </update>
+
+	<delete id="deletePictureById" parameterType="Integer">
+        delete from picture where picture_id = #{pictureId}
+    </delete>
+	
+    <delete id="deletePictureByIds" parameterType="String">
+        delete from picture where picture_id in 
+        <foreach item="pictureId" collection="array" open="(" separator="," close=")">
+            #{pictureId}
+        </foreach>
+    </delete>
+    
+</mapper>

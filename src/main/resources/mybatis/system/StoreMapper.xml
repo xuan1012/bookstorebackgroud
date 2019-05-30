@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.store.mapper.StoreMapper">
+    
+    <resultMap type="Store" id="StoreResult">
+        <result property="storeId"    column="store_id"    />
+        <result property="storeName"    column="store_name"    />
+        <result property="storeAddress"    column="store_address"    />
+        <result property="storeLevel"    column="store_level"    />
+        <result property="storeAge"    column="store_age"    />
+        <result property="storeScore"    column="store_score"    />
+        <result property="totleSales"    column="totle_sales"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+	
+	<sql id="selectStoreVo">
+        select store_id, store_name, store_address, store_level, store_age, store_score, totle_sales, state from store
+    </sql>
+	
+    <select id="selectStoreList" parameterType="Store" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        <where>  
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+             <if test="storeName != null  and storeName != '' "> and store_name = #{storeName}</if>
+             <if test="storeAddress != null  and storeAddress != '' "> and store_address = #{storeAddress}</if>
+             <if test="storeLevel != null  and storeLevel != '' "> and store_level = #{storeLevel}</if>
+             <if test="storeAge != null  and storeAge != '' "> and store_age = #{storeAge}</if>
+             <if test="storeScore != null "> and store_score = #{storeScore}</if>
+             <if test="totleSales != null "> and totle_sales = #{totleSales}</if>
+             <if test="state != null  and state != '' "> and state = #{state}</if>
+         </where>
+    </select>
+    
+    <select id="selectStoreById" parameterType="Integer" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        where store_id = #{storeId}
+    </select>
+        
+    <insert id="insertStore" parameterType="Store" useGeneratedKeys="true" keyProperty="storeId">
+        insert into store
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="storeName != null  and storeName != ''  ">store_name,</if>
+			<if test="storeAddress != null  and storeAddress != ''  ">store_address,</if>
+			<if test="storeLevel != null  and storeLevel != ''  ">store_level,</if>
+			<if test="storeAge != null  and storeAge != ''  ">store_age,</if>
+			<if test="storeScore != null  ">store_score,</if>
+			<if test="totleSales != null  ">totle_sales,</if>
+			<if test="state != null  and state != ''  ">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="storeName != null  and storeName != ''  ">#{storeName},</if>
+			<if test="storeAddress != null  and storeAddress != ''  ">#{storeAddress},</if>
+			<if test="storeLevel != null  and storeLevel != ''  ">#{storeLevel},</if>
+			<if test="storeAge != null  and storeAge != ''  ">#{storeAge},</if>
+			<if test="storeScore != null  ">#{storeScore},</if>
+			<if test="totleSales != null  ">#{totleSales},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateStore" parameterType="Store">
+        update store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeName != null  and storeName != ''  ">store_name = #{storeName},</if>
+            <if test="storeAddress != null  and storeAddress != ''  ">store_address = #{storeAddress},</if>
+            <if test="storeLevel != null  and storeLevel != ''  ">store_level = #{storeLevel},</if>
+            <if test="storeAge != null  and storeAge != ''  ">store_age = #{storeAge},</if>
+            <if test="storeScore != null  ">store_score = #{storeScore},</if>
+            <if test="totleSales != null  ">totle_sales = #{totleSales},</if>
+            <if test="state != null  and state != ''  ">state = #{state},</if>
+        </trim>
+        where store_id = #{storeId}
+    </update>
+
+	<delete id="deleteStoreById" parameterType="Integer">
+        delete from store where store_id = #{storeId}
+    </delete>
+	
+    <delete id="deleteStoreByIds" parameterType="String">
+        delete from store where store_id in 
+        <foreach item="storeId" collection="array" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </delete>
+    
+</mapper>

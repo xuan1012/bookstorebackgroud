@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.bookmark.mapper.BookmarkMapper">
+    
+    <resultMap type="Bookmark" id="BookmarkResult">
+        <result property="markId"    column="mark_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="markDate"    column="mark_date"    />
+    </resultMap>
+	
+	<sql id="selectBookmarkVo">
+        select mark_id, user_id, book_id, mark_date from bookmark
+    </sql>
+	
+    <select id="selectBookmarkList" parameterType="Bookmark" resultMap="BookmarkResult">
+        <include refid="selectBookmarkVo"/>
+        <where>  
+            <if test="markId != null "> and mark_id = #{markId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="bookId != null "> and book_id = #{bookId}</if>
+             <if test="markDate != null "> and mark_date = #{markDate}</if>
+         </where>
+    </select>
+    
+    <select id="selectBookmarkById" parameterType="Long" resultMap="BookmarkResult">
+        <include refid="selectBookmarkVo"/>
+        where mark_id = #{markId}
+    </select>
+        
+    <insert id="insertBookmark" parameterType="Bookmark" useGeneratedKeys="true" keyProperty="markId">
+        insert into bookmark
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="bookId != null  ">book_id,</if>
+			<if test="markDate != null  ">mark_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="bookId != null  ">#{bookId},</if>
+			<if test="markDate != null  ">#{markDate},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateBookmark" parameterType="Bookmark">
+        update bookmark
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="bookId != null  ">book_id = #{bookId},</if>
+            <if test="markDate != null  ">mark_date = #{markDate},</if>
+        </trim>
+        where mark_id = #{markId}
+    </update>
+
+	<delete id="deleteBookmarkById" parameterType="Long">
+        delete from bookmark where mark_id = #{markId}
+    </delete>
+	
+    <delete id="deleteBookmarkByIds" parameterType="String">
+        delete from bookmark where mark_id in 
+        <foreach item="markId" collection="array" open="(" separator="," close=")">
+            #{markId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.comment.mapper.CommentMapper">
+    
+    <resultMap type="Comment" id="CommentResult">
+        <result property="commentId"    column="comment_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="content"    column="content"    />
+        <result property="commentDate"    column="comment_date"    />
+        <result property="level"    column="level"    />
+    </resultMap>
+	
+	<sql id="selectCommentVo">
+        select comment_id, user_id, book_id, order_id, content, comment_date, level from comment
+    </sql>
+	
+    <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        <where>  
+            <if test="commentId != null "> and comment_id = #{commentId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="bookId != null "> and book_id = #{bookId}</if>
+             <if test="orderId != null "> and order_id = #{orderId}</if>
+             <if test="content != null  and content != '' "> and content = #{content}</if>
+             <if test="commentDate != null "> and comment_date = #{commentDate}</if>
+             <if test="level != null "> and level = #{level}</if>
+         </where>
+    </select>
+    
+    <select id="selectCommentById" parameterType="Long" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        where comment_id = #{commentId}
+    </select>
+        
+    <insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
+        insert into comment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="bookId != null  ">book_id,</if>
+			<if test="orderId != null  ">order_id,</if>
+			<if test="content != null  and content != ''  ">content,</if>
+			<if test="commentDate != null  ">comment_date,</if>
+			<if test="level != null  ">level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="bookId != null  ">#{bookId},</if>
+			<if test="orderId != null  ">#{orderId},</if>
+			<if test="content != null  and content != ''  ">#{content},</if>
+			<if test="commentDate != null  ">#{commentDate},</if>
+			<if test="level != null  ">#{level},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateComment" parameterType="Comment">
+        update comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="bookId != null  ">book_id = #{bookId},</if>
+            <if test="orderId != null  ">order_id = #{orderId},</if>
+            <if test="content != null  and content != ''  ">content = #{content},</if>
+            <if test="commentDate != null  ">comment_date = #{commentDate},</if>
+            <if test="level != null  ">level = #{level},</if>
+        </trim>
+        where comment_id = #{commentId}
+    </update>
+
+	<delete id="deleteCommentById" parameterType="Long">
+        delete from comment where comment_id = #{commentId}
+    </delete>
+	
+    <delete id="deleteCommentByIds" parameterType="String">
+        delete from comment where comment_id in 
+        <foreach item="commentId" collection="array" open="(" separator="," close=")">
+            #{commentId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.address.mapper.AddressMapper">
+    
+    <resultMap type="Address" id="AddressResult">
+        <result property="addressId"    column="address_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="area"    column="area"    />
+        <result property="postcode"    column="postcode"    />
+        <result property="defaultAddress"    column="default_address"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+	
+	<sql id="selectAddressVo">
+        select address_id, user_id, content, area, postcode, default_address, phone from address
+    </sql>
+	
+    <select id="selectAddressList" parameterType="Address" resultMap="AddressResult">
+        <include refid="selectAddressVo"/>
+        <where>  
+            <if test="addressId != null "> and address_id = #{addressId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="content != null  and content != '' "> and content = #{content}</if>
+             <if test="area != null  and area != '' "> and area = #{area}</if>
+             <if test="postcode != null "> and postcode = #{postcode}</if>
+             <if test="defaultAddress != null  and defaultAddress != '' "> and default_address = #{defaultAddress}</if>
+             <if test="phone != null "> and phone = #{phone}</if>
+         </where>
+    </select>
+    
+    <select id="selectAddressById" parameterType="Long" resultMap="AddressResult">
+        <include refid="selectAddressVo"/>
+        where address_id = #{addressId}
+    </select>
+        
+    <insert id="insertAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="addressId">
+        insert into address
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="content != null  and content != ''  ">content,</if>
+			<if test="area != null  and area != ''  ">area,</if>
+			<if test="postcode != null  ">postcode,</if>
+			<if test="defaultAddress != null  and defaultAddress != ''  ">default_address,</if>
+			<if test="phone != null  ">phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="content != null  and content != ''  ">#{content},</if>
+			<if test="area != null  and area != ''  ">#{area},</if>
+			<if test="postcode != null  ">#{postcode},</if>
+			<if test="defaultAddress != null  and defaultAddress != ''  ">#{defaultAddress},</if>
+			<if test="phone != null  ">#{phone},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAddress" parameterType="Address">
+        update address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="content != null  and content != ''  ">content = #{content},</if>
+            <if test="area != null  and area != ''  ">area = #{area},</if>
+            <if test="postcode != null  ">postcode = #{postcode},</if>
+            <if test="defaultAddress != null  and defaultAddress != ''  ">default_address = #{defaultAddress},</if>
+            <if test="phone != null  ">phone = #{phone},</if>
+        </trim>
+        where address_id = #{addressId}
+    </update>
+
+	<delete id="deleteAddressById" parameterType="Long">
+        delete from address where address_id = #{addressId}
+    </delete>
+	
+    <delete id="deleteAddressByIds" parameterType="String">
+        delete from address where address_id in 
+        <foreach item="addressId" collection="array" open="(" separator="," close=")">
+            #{addressId}
+        </foreach>
+    </delete>
+    
+</mapper>
