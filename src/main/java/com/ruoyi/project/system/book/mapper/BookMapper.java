@@ -7,7 +7,7 @@ import java.util.List;
  * 书籍 数据层
  * 
  * @author ruoyi
- * @date 2019-05-30
+ * @date 2019-06-11
  */
 public interface BookMapper 
 {

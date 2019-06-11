@@ -12,7 +12,7 @@ import com.ruoyi.common.utils.text.Convert;
  * 书籍 服务层实现
  * 
  * @author ruoyi
- * @date 2019-05-30
+ * @date 2019-06-11
  */
 @Service
 public class BookServiceImpl implements IBookService 

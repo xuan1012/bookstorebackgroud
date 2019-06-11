@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="publicationDate"    column="publication_date"    />
         <result property="count"    column="count"    />
         <result property="score"    column="score"    />
+        <result property="classification"    column="classification"    />
     </resultMap>
 	
 	<sql id="selectBookVo">
-        select book_id, book_name, book_price, author, publishing, store_id, sales, publication_date, count, score from book
+        select book_id, book_name, book_price, author, publishing, store_id, sales, publication_date, count, score, classification from book
     </sql>
 	
     <select id="selectBookList" parameterType="Book" resultMap="BookResult">
@@ -34,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="publicationDate != null "> and publication_date = #{publicationDate}</if>
              <if test="count != null "> and count = #{count}</if>
              <if test="score != null "> and score = #{score}</if>
+             <if test="classification != null  and classification != '' "> and classification = #{classification}</if>
          </where>
     </select>
     
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="publicationDate != null  ">publication_date,</if>
 			<if test="count != null  ">count,</if>
 			<if test="score != null  ">score,</if>
+			<if test="classification != null  and classification != ''  ">classification,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="bookName != null  and bookName != ''  ">#{bookName},</if>
@@ -65,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="publicationDate != null  ">#{publicationDate},</if>
 			<if test="count != null  ">#{count},</if>
 			<if test="score != null  ">#{score},</if>
+			<if test="classification != null  and classification != ''  ">#{classification},</if>
          </trim>
     </insert>
 	 
@@ -80,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="publicationDate != null  ">publication_date = #{publicationDate},</if>
             <if test="count != null  ">count = #{count},</if>
             <if test="score != null  ">score = #{score},</if>
+            <if test="classification != null  and classification != ''  ">classification = #{classification},</if>
         </trim>
         where book_id = #{bookId}
     </update>

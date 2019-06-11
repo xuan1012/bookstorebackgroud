@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 书籍表 book
  * 
  * @author ruoyi
- * @date 2019-05-30
+ * @date 2019-06-11
  */
 public class Book extends BaseEntity
 {
@@ -36,6 +36,8 @@ public class Book extends BaseEntity
 	private Integer count;
 	/** 评分 */
 	private BigDecimal score;
+	/**  */
+	private String classification;
 
 	public void setBookId(Long bookId) 
 	{
@@ -127,6 +129,15 @@ public class Book extends BaseEntity
 	{
 		return score;
 	}
+	public void setClassification(String classification) 
+	{
+		this.classification = classification;
+	}
+
+	public String getClassification() 
+	{
+		return classification;
+	}
 
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -140,6 +151,7 @@ public class Book extends BaseEntity
             .append("publicationDate", getPublicationDate())
             .append("count", getCount())
             .append("score", getScore())
+            .append("classification", getClassification())
             .toString();
     }
 }

@@ -23,7 +23,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
  * 书籍信息操作处理
  * 
  * @author ruoyi
- * @date 2019-05-30
+ * @date 2019-06-11
  */
 @Controller
 @RequestMapping("/system/book")
