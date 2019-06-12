@@ -581,7 +581,7 @@
                 var $input = $(".bootstrap-tree-table .treetable-bars .columns label").find("input[value='"+field+"']")
                 $input.prop("checked", '');
             }
-        }
+        };
         // 初始化
         init();
         return target;
